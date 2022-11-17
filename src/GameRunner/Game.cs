@@ -27,7 +27,7 @@ public class Game : IGame
 
     public int FindShortestPath(char[,] grid, int length)
     {
-        QItem source = new QItem(0, 0, 0);
+        MapCell source = new MapCell(0, 0, 0);
 
         // Marking blocked cells as visited.
         bool[,] visited = new bool[length, length];
@@ -48,61 +48,53 @@ public class Game : IGame
                 // Finding source
                 if (grid[i, j] == 'E')
                 {
-                    source.row = i;
-                    source.col = j;
+                    source.X = i;
+                    source.Y = j;
                 }
             }
         }
 
         // Apply BFS on matrix cells starting from X
-        Queue<QItem> q = new Queue<QItem>();
+        Queue<MapCell> q = new();
         q.Enqueue(source);
-        visited[source.row, source.col] = true;
+        visited[source.X, source.Y] = true;
         while (q.Count > 0)
         {
-            QItem p = q.Peek();
+            MapCell p = q.Peek();
             q.Dequeue();
 
             // Start
-            if (grid[p.row, p.col] == 'X')
+            if (grid[p.X, p.Y] == 'X')
             {
-                return p.dist;
+                return p.Step;
             }
 
             // Move up
-            if (p.row - 1 >= 0
-                && visited[p.row - 1, p.col] == false)
+            if (p.X - 1 >= 0 && visited[p.X - 1, p.Y] == false)
             {
-                q.Enqueue(new QItem(p.row - 1, p.col,
-                                    p.dist + 1));
-                visited[p.row - 1, p.col] = true;
+                q.Enqueue(new MapCell(p.X - 1, p.Y, p.Step + 1));
+                visited[p.X - 1, p.Y] = true;
             }
 
             // Move down
-            if (p.row + 1 < length
-                && visited[p.row + 1, p.col] == false)
+            if (p.X + 1 < length && visited[p.X + 1, p.Y] == false)
             {
-                q.Enqueue(new QItem(p.row + 1, p.col,
-                                    p.dist + 1));
-                visited[p.row + 1, p.col] = true;
+                q.Enqueue(new MapCell(p.X + 1, p.Y, p.Step + 1));
+                visited[p.X + 1, p.Y] = true;
             }
 
             // Move left
-            if (p.col - 1 >= 0
-                && visited[p.row, p.col - 1] == false)
+            if (p.Y - 1 >= 0 && visited[p.X, p.Y - 1] == false)
             {
-                q.Enqueue(new QItem(p.row, p.col - 1,
-                                    p.dist + 1));
-                visited[p.row, p.col - 1] = true;
+                q.Enqueue(new MapCell(p.X, p.Y - 1, p.Step + 1));
+                visited[p.X, p.Y - 1] = true;
             }
 
             // Meve right
-            if (p.col + 1 < length
-                && visited[p.row, p.col + 1] == false)
+            if (p.Y + 1 < length && visited[p.X, p.Y + 1] == false)
             {
-                q.Enqueue(new QItem(p.row, p.col + 1,
-                                    p.dist + 1));
-                visited[p.row, p.col + 1] = true;
+                q.Enqueue(new MapCell(p.X, p.Y + 1, p.Step + 1));
+                visited[p.X, p.Y + 1] = true;
             }
         }
         return -1;
@@ -135,16 +127,16 @@ public class Game : IGame
     }
 }
 
-public class QItem
+public class MapCell
 {
-    public int row;
-    public int col;
-    public int dist;
+    public int X;
+    public int Y;
+    public int Step;
 
-    public QItem(int x, int y, int w)
+    public MapCell(int x, int y, int s)
     {
-        this.row = x;
-        this.col = y;
-        this.dist = w;
+        this.X = x;
+        this.Y = y;
+        this.Step = s;
     }
 }
