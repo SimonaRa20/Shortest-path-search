@@ -17,10 +17,9 @@ public class Game : IGame
             validation.CheckMapSymbols(filePath) &&
             validation.CheckMapExits(filePath))
         {
-            int length = 0;
-            char[,] map = solution.Map(filePath, ref length);
-            solution.ChangeMapSetExits(map, length);
-            return solution.FindShortestPath(map, length);
+            char[,] map = solution.ReadFile(filePath);
+            solution.ChangeMapSetExits(map);
+            return solution.FindShortestPath(map);
         }
         else
         {

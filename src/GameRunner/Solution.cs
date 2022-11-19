@@ -2,8 +2,10 @@
 {
     public class Solution : ISolution
     {
-        public void ChangeMapSetExits(char[,] map, int length)
+        public void ChangeMapSetExits(char[,] map)
         {
+            int length = map.GetLength(0);
+            int width = map.GetLength(1);
             for (int i = 0; i < length; i++)
             {
                 if (map[0, i] == ' ')
@@ -25,18 +27,19 @@
             }
         }
 
-        public int FindShortestPath(char[,] grid, int length)
+        public int FindShortestPath(char[,] map)
         {
             MapCell source = new MapCell(0, 0, 0);
-
+            int length = map.GetLength(0);
+            int width = map.GetLength(1);
             // Marking blocked cells as visited.
-            bool[,] visited = new bool[length, length];
+            bool[,] visited = new bool[width, length];
 
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < length; j++)
                 {
-                    if (grid[i, j] == '1')
+                    if (map[i, j] == '1')
                     {
                         visited[i, j] = true;
                     }
@@ -46,7 +49,7 @@
                     }
 
                     // Finding source
-                    if (grid[i, j] == 'E')
+                    if (map[i, j] == 'E')
                     {
                         source.X = i;
                         source.Y = j;
@@ -64,7 +67,7 @@
                 q.Dequeue();
 
                 // Start
-                if (grid[p.X, p.Y] == 'X')
+                if (map[p.X, p.Y] == 'X')
                 {
                     return p.Step;
                 }
@@ -91,7 +94,7 @@
                 }
 
                 // Move right
-                if (p.Y + 1 < length && visited[p.X, p.Y + 1] == false)
+                if (p.Y + 1 < width && visited[p.X, p.Y + 1] == false)
                 {
                     q.Enqueue(new MapCell(p.X, p.Y + 1, p.Step + 1));
                     visited[p.X, p.Y + 1] = true;
@@ -100,13 +103,14 @@
             return -1;
         }
 
-        public char[,] Map(string filePath, ref int length)
+        public char[,] ReadFile(string filePath)
         {
-            length = File.ReadAllLines(filePath).Length;
-            char[,] arr = new char[length, length];
+            int length = File.ReadAllLines(filePath)[0].Length;
+            int width = File.ReadAllLines(filePath).Count();
+            char[,] arr = new char[length, width];
             StreamReader sr = File.OpenText(filePath);
 
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < width; i++)
             {
                 string line = sr.ReadLine();
                 for (int j = 0; j < line.Length; j++)

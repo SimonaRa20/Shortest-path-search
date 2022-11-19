@@ -51,11 +51,12 @@
         public bool CheckMapExits(string filePath)
         {
             int count = 0;
-            int length = 0;
-            char[,] map = solution.Map(filePath, ref length);
-            solution.ChangeMapSetExits(map, length);
+            char[,] map = ReadMap(filePath);
+            int length = map.GetLength(0);
+            int width = map.GetLength(1);
+            ChangeMapSetExits(map);
 
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < length; j++)
                 {
@@ -73,6 +74,48 @@
             else
             {
                 return true;
+            }
+        }
+
+        private char[,] ReadMap(string filePath)
+        {
+            int mapLength = File.ReadAllLines(filePath)[0].Length;
+            int mapWidth = File.ReadAllLines(filePath).Count();
+            char[,] arr = new char[mapLength, mapLength];
+            StreamReader sr = File.OpenText(filePath);
+            for (int i = 0; i < mapLength; i++)
+            {
+                string line = sr.ReadLine();
+                for (int j = 0; j < line.Length; j++)
+                {
+                    arr[i, j] = line[j];
+                }
+            }
+            return arr;
+        }
+
+        private void ChangeMapSetExits(char[,] map)
+        {
+            int length = map.GetLength(0);
+            int width = map.GetLength(1);
+            for (int i = 0; i < length; i++)
+            {
+                if (map[0, i] == ' ')
+                {
+                    map[0, i] = 'E';
+                }
+                else if (map[i, 0] == ' ')
+                {
+                    map[i, 0] = 'E';
+                }
+                else if (map[length - 1, i] == ' ')
+                {
+                    map[length - 1, i] = 'E';
+                }
+                else if (map[i, length - 1] == ' ')
+                {
+                    map[i, length - 1] = 'E';
+                }
             }
         }
     }

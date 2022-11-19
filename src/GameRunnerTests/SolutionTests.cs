@@ -15,47 +15,14 @@ namespace GameRunner.Tests
             solution = new Solution();
         }
 
-        [TestMethod()]
-        [Xunit.Theory]
-        [InlineData(@"TestData\map1.txt", true)]
-        [InlineData(@"TestData\map2.txt", true)]
-        [InlineData(@"TestData\map3.txt", true)]
-        [InlineData(@"TestData\map4.txt", true)]
-        [InlineData(@"TestData\map5.txt", false)]
-        public void CheckMapLengthAndWidthTest(string filePath, bool expectedResult)
-        {
-            solution.CheckMapLengthAndWidth(filePath).Should().Be(expectedResult);
-        }
-
-        [TestMethod()]
-        [Xunit.Theory]
-        [InlineData(@"TestData\map1.txt", true)]
-        [InlineData(@"TestData\map2.txt", true)]
-        [InlineData(@"TestData\map3.txt", true)]
-        [InlineData(@"TestData\map4.txt", true)]
-        [InlineData(@"TestData\map6.txt", false)]
-        public void CheckMapSymbolsTest(string filePath, bool expectedResult)
-        {
-            solution.CheckMapSymbols(filePath).Should().Be(expectedResult);
-        }
-
-        [TestMethod()]
-        [Xunit.Theory]
-        [InlineData(@"TestData\map1.txt", true)]
-        [InlineData(@"TestData\map2.txt", true)]
-        [InlineData(@"TestData\map7.txt", false)]
-        public void CheckMapExitsTest(string filePath, bool expectedResult)
-        {
-            solution.CheckMapExits(filePath).Should().Be(expectedResult);
-        }
 
         [TestMethod()]
         [Fact]
         public void ChangeMap1SetExitsTest()
         {
             int length = 0;
-            char[,] map = solution.Map(@"TestData\map1.txt", ref length);
-            solution.ChangeMapSetExits(map, length);
+            char[,] map = solution.ReadFile(@"TestData\map1.txt");
+            solution.ChangeMapSetExits(map);
 
             Assert.Equal(map, new char[,]{
                                              { '1', '1', '1', '1', '1' },
@@ -71,8 +38,8 @@ namespace GameRunner.Tests
         public void ChangeMap2SetExitsTest()
         {
             int length = 0;
-            char[,] map = solution.Map(@"TestData\map2.txt", ref length);
-            solution.ChangeMapSetExits(map, length);
+            char[,] map = solution.ReadFile(@"TestData\map2.txt");
+            solution.ChangeMapSetExits(map);
 
             Assert.Equal(map, new char[,]{
                                              { '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1' },
@@ -94,9 +61,9 @@ namespace GameRunner.Tests
         public void FindShortestPathMap1Test()
         {
             int length = 0;
-            char[,] map = solution.Map(@"TestData\map1.txt", ref length);
-            solution.ChangeMapSetExits(map, length);
-            solution.FindShortestPath(map, length).Should().Be(4);
+            char[,] map = solution.ReadFile(@"TestData\map1.txt");
+            solution.ChangeMapSetExits(map);
+            solution.FindShortestPath(map).Should().Be(4);
         }
 
         [TestMethod()]
@@ -104,9 +71,9 @@ namespace GameRunner.Tests
         public void FindShortestPathMap2Test()
         {
             int length = 0;
-            char[,] map = solution.Map(@"TestData\map2.txt", ref length);
-            solution.ChangeMapSetExits(map, length);
-            solution.FindShortestPath(map, length).Should().Be(13);
+            char[,] map = solution.ReadFile(@"TestData\map2.txt");
+            solution.ChangeMapSetExits(map);
+            solution.FindShortestPath(map).Should().Be(13);
         }
     }
 }
