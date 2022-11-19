@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xunit;
 
 namespace GameRunner.Tests
 {
-    [TestFixture]
+    [TestClass()]
     public class GameTests
     {
         private ISolution solution;
@@ -14,6 +14,7 @@ namespace GameRunner.Tests
             solution = new Solution();
         }
 
+        [TestMethod()]
         [Xunit.Theory]
         [InlineData(@"TestData\map1.txt", 4)]
         [InlineData(@"TestData\map2.txt", 13)]

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xunit;
+using Assert = Xunit.Assert;
 
 namespace GameRunner.Tests
 {
@@ -48,63 +49,64 @@ namespace GameRunner.Tests
             solution.CheckMapExits(filePath).Should().Be(expectedResult);
         }
 
-        //[Theory]
-        //[TestMethod()]
-        //[DataTestMethod]
-        //[DynamicData(nameof(Map1DataChangedMap), DynamicDataSourceType.Method), InlineData(@"TestData\map1.txt")]
-        ////[InlineData(@"TestData\map2.txt"), DynamicData(nameof(Map2DataChangedMap), DynamicDataSourceType.Method)]
-        //public void ChangeMapSetExitsTest(char[,] expectedResult, string filePath)
-        //{
-        //    int length = 0;
-        //    char[,] changedMap = solution.Map(filePath, ref length);
-        //    changedMap.Should().Be(expectedResult);
-        //}
+        [TestMethod()]
+        [Fact]
+        public void ChangeMap1SetExitsTest()
+        {
+            int length = 0;
+            char[,] map = solution.Map(@"TestData\map1.txt", ref length);
+            solution.ChangeMapSetExits(map, length);
 
-        //[TestMethod()]
-        //[DataTestMethod]
-        //[DynamicData(nameof(Map1DataChangedMap), DynamicDataSourceType.Method), InlineData(4)]
-        ////[InlineData(@"TestData\map2.txt"), DynamicData(nameof(Map2DataChangedMap), DynamicDataSourceType.Method)]
-        //public void FindShortestPathTest(char[,] map, int expectedResult)
-        //{
-        //    int length = map.Length;
-        //    solution.FindShortestPath(map, length).Should().Be(expectedResult);
-        //}
+            Assert.Equal(map, new char[,]{
+                                             { '1', '1', '1', '1', '1' },
+                                             { '1', ' ', 'X', ' ', '1' },
+                                             { '1', ' ', '1', ' ', '1' },
+                                             { '1', ' ', ' ', ' ', '1' },
+                                             { '1', '1', '1', 'E', '1' }
+                                         });
+        }
 
-        //[TestMethod()]
-        //public void MapTest()
-        //{
-        //    Assert.Fail();
-        //}
+        [TestMethod()]
+        [Fact]
+        public void ChangeMap2SetExitsTest()
+        {
+            int length = 0;
+            char[,] map = solution.Map(@"TestData\map2.txt", ref length);
+            solution.ChangeMapSetExits(map, length);
 
-        //static string Map1DataPath = @"TestData\map1.txt";
+            Assert.Equal(map, new char[,]{
+                                             { '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1' },
+                                             { '1', ' ', ' ', ' ', ' ', ' ', '1', ' ', ' ', ' ', '1' },
+                                             { '1', ' ', '1', ' ', '1', ' ', '1', '1', '1', ' ', '1' },
+                                             { '1', ' ', '1', ' ', '1', ' ', ' ', ' ', ' ', ' ', '1' },
+                                             { '1', ' ', '1', ' ', '1', ' ', '1', '1', '1', '1', '1' },
+                                             { '1', ' ', ' ', ' ', '1', 'X', ' ', ' ', ' ', ' ', '1' },
+                                             { '1', ' ', '1', '1', '1', '1', '1', '1', '1', ' ', '1' },
+                                             { '1', ' ', ' ', ' ', '1', ' ', ' ', ' ', ' ', ' ', '1' },
+                                             { '1', '1', '1', ' ', '1', ' ', '1', '1', '1', ' ', '1' },
+                                             { '1', ' ', ' ', ' ', '1', ' ', '1', ' ', ' ', ' ', '1' },
+                                             { '1', 'E', '1', '1', '1', 'E', '1', '1', '1', '1', '1' }
+                                         });
+        }
 
-        //static IEnumerable<object[]> Map1DataChangedMap()
-        //{
-        //    return new[] { new[] { new char[,]{
-        //                                        { '1', '1', '1', '1', '1' },
-        //                                        { '1', ' ', 'X', ' ', '1' },
-        //                                        { '1', ' ', '1', ' ', '1' },
-        //                                        { '1', ' ', ' ', ' ', '1' },
-        //                                        { '1', '1', '1', 'E', '1' }
-        //                                   } } };
-        //}
+        [TestMethod()]
+        [Fact]
+        public void FindShortestPathMap1Test()
+        {
+            int length = 0;
+            char[,] map = solution.Map(@"TestData\map1.txt", ref length);
+            solution.ChangeMapSetExits(map, length);
+            solution.FindShortestPath(map, length).Should().Be(4);
+        }
 
-        //static IEnumerable<object[]> Map2DataChangedMap()
-        //{
-        //    return new[] { new[] { new char[,]{
-        //                                        { '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1' },
-        //                                        { '1', ' ', ' ', ' ', ' ', ' ', '1', ' ', ' ', ' ', '1' },
-        //                                        { '1', ' ', '1', ' ', '1', ' ', '1', '1', '1', ' ', '1' },
-        //                                        { '1', ' ', '1', ' ', '1', ' ', ' ', ' ', ' ', ' ', '1' },
-        //                                        { '1', ' ', '1', ' ', '1', ' ', '1', '1', '1', '1', '1' },
-        //                                        { '1', ' ', ' ', ' ', '1', 'X', ' ', ' ', ' ', ' ', '1' },
-        //                                        { '1', ' ', '1', '1', '1', '1', '1', '1', '1', ' ', '1' },
-        //                                        { '1', ' ', ' ', ' ', '1', ' ', ' ', ' ', ' ', ' ', '1' },
-        //                                        { '1', '1', '1', ' ', '1', ' ', '1', '1', '1', ' ', '1' },
-        //                                        { '1', ' ', ' ', ' ', '1', ' ', '1', ' ', ' ', ' ', '1' },
-        //                                        { '1', ' ', '1', '1', '1', ' ', '1', '1', '1', '1', '1' }
-        //                                   } } };
-        //}
-
+        [TestMethod()]
+        [Fact]
+        public void FindShortestPathMap2Test()
+        {
+            int length = 0;
+            char[,] map = solution.Map(@"TestData\map2.txt", ref length);
+            solution.ChangeMapSetExits(map, length);
+            solution.FindShortestPath(map, length).Should().Be(13);
+        }
     }
 }
