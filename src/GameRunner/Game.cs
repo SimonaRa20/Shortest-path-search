@@ -3,17 +3,19 @@
 public class Game : IGame
 {
     private ISolution solution;
+    private IMapValidation validation;
 
-    public Game(ISolution solution)
+    public Game(ISolution solution, IMapValidation validation)
     {
         this.solution = solution;
+        this.validation = validation;
     }
 
     public int Run(string filePath)
     {
-        if (solution.CheckMapLengthAndWidth(filePath) &&
-            solution.CheckMapSymbols(filePath) &&
-            solution.CheckMapExits(filePath))
+        if (validation.CheckMapLengthAndWidth(filePath) &&
+            validation.CheckMapSymbols(filePath) &&
+            validation.CheckMapExits(filePath))
         {
             int length = 0;
             char[,] map = solution.Map(filePath, ref length);
