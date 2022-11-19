@@ -1,9 +1,10 @@
 ﻿using FluentAssertions;
+using NUnit.Framework;
 using Xunit;
 
 namespace GameRunner.Tests
 {
-
+    [TestFixture]
     public class GameTests
     {
         private ISolution solution;
@@ -13,20 +14,16 @@ namespace GameRunner.Tests
             solution = new Solution();
         }
 
-        [Fact]
-        public void RunTestCheckFirstMapShortestPathResult()
+        [Xunit.Theory]
+        [InlineData(@"TestData\map1.txt", 4)]
+        [InlineData(@"TestData\map2.txt", 13)]
+        [InlineData(@"TestData\map3.txt", 0)]
+        [InlineData(@"TestData\map4.txt", 0)]
+        public void RunTestCheckMapShortestPathResult(string filePath, int expectedResult)
         {
             IGame game = new Game(solution);
-            int expected = game.Run(@"TestData\map1.txt");
-            expected.Should().Be(4);
-        }
-
-        [Fact]
-        public void RunTestCheckSecongMapShortestPathResult()
-        {
-            IGame game = new Game(solution);
-            int expected = game.Run(@"TestData\map2.txt");
-            expected.Should().Be(13);
+            int expected = game.Run(filePath);
+            expected.Should().Be(expectedResult);
         }
     }
 }

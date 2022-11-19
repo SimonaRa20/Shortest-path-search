@@ -11,7 +11,9 @@ public class Game : IGame
 
     public int Run(string filePath)
     {
-        if (solution.CheckMapLengthAndWidth(filePath))
+        if (solution.CheckMapLengthAndWidth(filePath) &&
+            solution.CheckMapSymbols(filePath) &&
+            solution.CheckMapExits(filePath))
         {
             int length = 0;
             char[,] map = solution.Map(filePath, ref length);
@@ -20,7 +22,7 @@ public class Game : IGame
         }
         else
         {
-            return -1;
+            return 0;
         }
     }
 }
