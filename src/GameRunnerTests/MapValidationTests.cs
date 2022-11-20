@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xunit;
+using Assert = Xunit.Assert;
 
 namespace GameRunner.Tests
 {
@@ -47,6 +48,45 @@ namespace GameRunner.Tests
         public void CheckMapExitsTest(string filePath, bool expectedResult)
         {
             validation.CheckMapExits(filePath).Should().Be(expectedResult);
+        }
+
+        [TestMethod()]
+        [Fact]
+        public void ChangeMap1SetExitsTest()
+        {
+            char[,] map = validation.ReadMap(@"TestData\map1.txt");
+            validation.ChangeMapSetExits(map);
+
+            Assert.Equal(map, new char[,]{
+                                             { '1', '1', '1', '1', '1' },
+                                             { '1', ' ', 'X', ' ', '1' },
+                                             { '1', ' ', '1', ' ', '1' },
+                                             { '1', ' ', ' ', ' ', '1' },
+                                             { '1', '1', '1', 'E', '1' }
+                                         });
+        }
+
+        [TestMethod()]
+        [Fact]
+        public void ChangeMap2SetExitsTest()
+        {
+            int length = 0;
+            char[,] map = validation.ReadMap(@"TestData\map2.txt");
+            validation.ChangeMapSetExits(map);
+
+            Assert.Equal(map, new char[,]{
+                                             { '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1' },
+                                             { '1', ' ', ' ', ' ', ' ', ' ', '1', ' ', ' ', ' ', '1' },
+                                             { '1', ' ', '1', ' ', '1', ' ', '1', '1', '1', ' ', '1' },
+                                             { '1', ' ', '1', ' ', '1', ' ', ' ', ' ', ' ', ' ', '1' },
+                                             { '1', ' ', '1', ' ', '1', ' ', '1', '1', '1', '1', '1' },
+                                             { '1', ' ', ' ', ' ', '1', 'X', ' ', ' ', ' ', ' ', '1' },
+                                             { '1', ' ', '1', '1', '1', '1', '1', '1', '1', ' ', '1' },
+                                             { '1', ' ', ' ', ' ', '1', ' ', ' ', ' ', ' ', ' ', '1' },
+                                             { '1', '1', '1', ' ', '1', ' ', '1', '1', '1', ' ', '1' },
+                                             { '1', ' ', ' ', ' ', '1', ' ', '1', ' ', ' ', ' ', '1' },
+                                             { '1', 'E', '1', '1', '1', 'E', '1', '1', '1', '1', '1' }
+                                         });
         }
     }
 }

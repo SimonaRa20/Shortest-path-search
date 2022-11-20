@@ -17,8 +17,8 @@ public class Game : IGame
             validation.CheckMapSymbols(filePath) &&
             validation.CheckMapExits(filePath))
         {
-            char[,] map = solution.ReadFile(filePath);
-            solution.ChangeMapSetExits(map);
+            char[,] map = validation.ReadMap(filePath);
+            validation.ChangeMapSetExits(map);
             return solution.FindShortestPath(map);
         }
         else

@@ -11,10 +11,9 @@
 
         public bool CheckMapLengthAndWidth(string filePath)
         {
-            int mapLength = File.ReadAllLines(filePath)[0].Length;
-            int mapWidth = File.ReadAllLines(filePath).Count();
+            char[,] map = ReadMap(filePath);
 
-            if (mapLength != mapWidth || mapLength < 5 || mapLength > 11001 || mapWidth < 5 || mapWidth > 11001)
+            if (map.GetLength(0) != map.GetLength(1) || map.GetLength(0) < 5 || map.GetLength(0) > 11001 || map.GetLength(1) < 5 || map.GetLength(1) > 11001)
             {
                 return false;
             }
@@ -26,16 +25,13 @@
 
         public bool CheckMapSymbols(string filePath)
         {
-            int mapLength = File.ReadAllLines(filePath).Length;
-            char[,] arr = new char[mapLength, mapLength];
-            StreamReader sr = File.OpenText(filePath);
-            for (int i = 0; i < mapLength; i++)
+            char[,] map = ReadMap(filePath);
+
+            for (int i = 0; i < map.GetLength(0); i++)
             {
-                string line = sr.ReadLine();
-                for (int j = 0; j < line.Length; j++)
+                for (int j = 0; j < map.GetLength(1); j++)
                 {
-                    arr[i, j] = line[j];
-                    if (arr[i, j] == ' ' || arr[i, j] == '1' || arr[i, j] == 'X')
+                    if (map[i, j] == ' ' || map[i, j] == '1' || map[i, j] == 'X')
                     {
                         continue;
                     }
@@ -52,13 +48,11 @@
         {
             int count = 0;
             char[,] map = ReadMap(filePath);
-            int length = map.GetLength(0);
-            int width = map.GetLength(1);
             ChangeMapSetExits(map);
 
-            for (int i = 0; i < width; i++)
+            for (int i = 0; i < map.GetLength(1); i++)
             {
-                for (int j = 0; j < length; j++)
+                for (int j = 0; j < map.GetLength(0); j++)
                 {
                     if (map[i, j] == 'E')
                     {
@@ -77,16 +71,16 @@
             }
         }
 
-        private char[,] ReadMap(string filePath)
+        public char[,] ReadMap(string filePath)
         {
-            int mapLength = File.ReadAllLines(filePath)[0].Length;
-            int mapWidth = File.ReadAllLines(filePath).Count();
-            char[,] arr = new char[mapLength, mapLength];
+            int columns = File.ReadAllLines(filePath)[0].Length;
+            int rows = File.ReadAllLines(filePath).Count();
+            char[,] arr = new char[rows, columns];
             StreamReader sr = File.OpenText(filePath);
-            for (int i = 0; i < mapLength; i++)
+            for (int i = 0; i < rows; i++)
             {
                 string line = sr.ReadLine();
-                for (int j = 0; j < line.Length; j++)
+                for (int j = 0; j < columns; j++)
                 {
                     arr[i, j] = line[j];
                 }
@@ -94,27 +88,33 @@
             return arr;
         }
 
-        private void ChangeMapSetExits(char[,] map)
+        public void ChangeMapSetExits(char[,] map)
         {
-            int length = map.GetLength(0);
-            int width = map.GetLength(1);
-            for (int i = 0; i < length; i++)
+            int rows = map.GetLength(0);
+            int columns = map.GetLength(1);
+            // marking outputs with different symbol
+            char mapExit = 'E';
+            for (int i = 0; i < rows; i++)
             {
-                if (map[0, i] == ' ')
+                if (map[i, 0] == ' ')
                 {
-                    map[0, i] = 'E';
+                    map[i, 0] = mapExit;
                 }
-                else if (map[i, 0] == ' ')
+                else if (map[rows - 1, i] == ' ')
                 {
-                    map[i, 0] = 'E';
+                    map[rows - 1, i] = mapExit;
                 }
-                else if (map[length - 1, i] == ' ')
+            }
+
+            for (int j = 0; j < columns; j++)
+            {
+                if (map[0, j] == ' ')
                 {
-                    map[length - 1, i] = 'E';
+                    map[0, j] = mapExit;
                 }
-                else if (map[i, length - 1] == ' ')
+                else if (map[j, columns - 1] == ' ')
                 {
-                    map[i, length - 1] = 'E';
+                    map[j, columns - 1] = mapExit;
                 }
             }
         }
